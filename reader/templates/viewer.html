@@ -6,11 +6,17 @@
         <p>Click on each word to see definitions and usage! You can also click the icon below for pronunciation assistance.</p>
 
         {% if user.is_authenticated %}
-
-        <div class="paragraph_box">
-        {% for word in word_list %}
-            <div id="word" onclick="myFunction()">{{word}}</div>
-        {% endfor %}
+        <div class="viewer_container">
+            <div class="paragraph_box">
+                {% for word in word_list %}
+                    <div class="word" id="{{forloop.counter}}">{{word}}</div>
+                {% endfor %}
+            </div>
+        
+            <div class="definition_box">
+                <p id="part_of_speech"></p>
+                <p id="definitions"></p>
+            </div>
         </div>
 
         {% else %}
@@ -18,10 +24,72 @@
             <h4>Please login to continue. If you don't have an account, sign up above!</h3>
         {% endif %}
     </div>
+    
 
     <script>
-        function myFunction() {
-          document.getElementById("word").innerHTML = "YOU CLICKED ME!";
+        let dictionary = 
+        {
+            fetchData: function(word)
+            {
+                api_key = "d98bcc41-7387-4462-97a6-a380a51bbcc6";
+
+                url_part_1 = "https://www.dictionaryapi.com/api/v3/references/learners/json/";
+                url_part_2 = word;
+                url_part_3 = "?key=" + api_key;
+                final_url = url_part_1 + url_part_2 + url_part_3;
+                fetch
+                (
+                    final_url
+                )
+                .then((response) => response.text())
+                .then((data) => this.checkIfValid(data));
+            },
+
+            checkIfValid: function(data)
+            {
+                if(data.length == 0)
+                {
+                    document.getElementById("part_of_speech").innerHTML = "Error: Not a valid word";
+                }
+                else
+                {
+                    this.displayData(data);
+                }
+            },
+            
+            displayData: function(data)
+            {
+                var all_data = JSON.parse(data);
+                
+                definition_section = all_data['meta']['app-shortdef'];
+                document.write(data);
+                part_of_speech = definition_section['fl'];
+                definition = definition_section['def'];
+
+                document.getElementById("part_of_speech").innerHTML = part_of_speech;
+                document.getElementById("definitions").innerHTML = definition;
+            },
+
+            get_info: function(word) 
+            {
+                this.fetchData(word);
+            },
+        }
+
+
+        var all_words = document.querySelectorAll(".word")
+        for (i = 0; i < all_words.length; ++i) 
+        {
+            var word = all_words[i].innerHTML;
+            all_words[i].addEventListener("click", function () 
+            {
+                dictionary.get_info("apple");
+            });
+        }
+
+        function myFunction(id) 
+        {
+            document.getElementById(id).innerHTML = "YOU CLICKED ME!";
         }
     </script>
 {% endblock %}
