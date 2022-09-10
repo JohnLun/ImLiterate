@@ -60,16 +60,21 @@
             displayData: function(data)
             {
                 data = data.replace('app-shortdef', 'shortdef');
-                data = data.replaceAll('{bc}', '');
-                data = data.replaceAll('{it}', '');
-                data = data.replaceAll('{/it}', '');
+                //document.write(data);
                 var all_data = JSON.parse(data);
 
                 part_of_speech = all_data[0].meta.shortdef.fl;
                 definition = all_data[0].meta.shortdef.def;
+
+                definition = JSON.stringify(definition);
+                definition = definition.replaceAll('{bc}', '');
+                definition = definition.replaceAll('{it}', '');
+                definition = definition.replaceAll('{/it}', '');
+                definition = definition.replaceAll('[', '');
+                definition = definition.replaceAll(']', '');
+                definition = definition.replaceAll('"', '');
                 
                 //document.write(definition);
-
                 document.getElementById("part_of_speech").innerHTML = "Part of Speech: " + part_of_speech;
                 document.getElementById("definitions").innerHTML = "Definition(s): " + definition;
             },
@@ -86,6 +91,11 @@
             var toSpeak = new SpeechSynthesisUtterance(word);
             tts.speak(toSpeak);
             dictionary.get_info(word);
+
+            //Default values 
+            document.getElementById("part_of_speech").innerHTML = "Part of Speech: ";
+            document.getElementById("definitions").innerHTML = "Definition(s): ";
+
             document.getElementById("definition_title").innerHTML = word;
         }
     </script>

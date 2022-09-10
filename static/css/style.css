@@ -57,3 +57,13 @@
     min-height: 500px;
     transition: 0.2s ease-in-out;
 }
+
+#part_of_speech
+{
+    text-align: left;
+}
+
+#definitions
+{
+    text-align: left;
+}
