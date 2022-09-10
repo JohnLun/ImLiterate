@@ -6,11 +6,18 @@
         <p>Click on each word to see definitions and usage! You can also click the icon below for pronunciation assistance.</p>
 
         {% if user.is_authenticated %}
-
-        <div class="paragraph_box">
-        {% for word in word_list %}
-            <div id="word" onclick="myFunction()">{{word}}</div>
-        {% endfor %}
+        <div class="viewer_container">
+            <div class="paragraph_box">
+                {% for word in word_list %}
+                    <div class="word" id="{{forloop.counter}}" onclick="myFunction('{{word}}')">{{word}}</div>
+                {% endfor %}
+            </div>
+        
+            <div class="definition_box">
+                <h3 id="definition_title">Click on a word to learn more!</h3>
+                <p id="part_of_speech"></p>
+                <p id="definitions"></p>
+            </div>
         </div>
 
         {% else %}
@@ -18,10 +25,66 @@
             <h4>Please login to continue. If you don't have an account, sign up above!</h3>
         {% endif %}
     </div>
+    
 
     <script>
-        function myFunction() {
-          document.getElementById("word").innerHTML = "YOU CLICKED ME!";
+        let dictionary = 
+        {
+            fetchData: function(word)
+            {
+                api_key = "d98bcc41-7387-4462-97a6-a380a51bbcc6";
+
+                url_part_1 = "https://www.dictionaryapi.com/api/v3/references/learners/json/";
+                url_part_2 = word;
+                url_part_3 = "?key=" + api_key;
+                final_url = url_part_1 + url_part_2 + url_part_3;
+                fetch
+                (
+                    final_url
+                )
+                .then((response) => response.text())
+                .then((data) => this.checkIfValid(data));
+            },
+
+            checkIfValid: function(data)
+            {
+                if(data.length == 0)
+                {
+                    document.getElementById("part_of_speech").innerHTML = "Error: Not a valid word";
+                }
+                else
+                {
+                    this.displayData(data);
+                }
+            },
+            
+            displayData: function(data)
+            {
+                data = data.replace('app-shortdef', 'shortdef');
+                data = data.replaceAll('{bc}', '');
+                data = data.replaceAll('{it}', '');
+                data = data.replaceAll('{/it}', '');
+                var all_data = JSON.parse(data);
+
+                part_of_speech = all_data[0].meta.shortdef.fl;
+                definition = all_data[0].meta.shortdef.def;
+                
+                //document.write(definition);
+
+                document.getElementById("part_of_speech").innerHTML = "Part of Speech: " + part_of_speech;
+                document.getElementById("definitions").innerHTML = "Definition(s): " + definition;
+            },
+
+            get_info: function(word) 
+            {
+                this.fetchData(word);
+            },
+        }
+
+        function myFunction(word) 
+        {
+            dictionary.get_info(word);
+            document.getElementById("definition_title").innerHTML = word;
         }
     </script>
 {% endblock %}

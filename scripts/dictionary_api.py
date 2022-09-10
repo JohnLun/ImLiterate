@@ -26,5 +26,3 @@ def get_definition(word):
     definition = definition_section['def']
     print(part_of_speech)
     print(definition)
-
-get_definition("pair")

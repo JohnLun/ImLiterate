@@ -12,13 +12,21 @@
     transition: 0.2s ease-in-out;
 }
 
-#word
+.viewer_container
 {
-    display: inline-block;
-    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
-#word:hover
+.word
+{
+    display: inline-block;
+    padding: 0px;
+}
+
+.word:hover
 {
     cursor: pointer;
     background-color: gray;
@@ -31,9 +39,21 @@
     padding: 4rem 2rem 4rem 2rem;
     border-radius: 20px;
     width: 100%;
+    min-width: 500px;
+    max-width: 700px;
+    min-height: 500px;
+    transition: 0.2s ease-in-out;
+}
+
+.definition_box
+{
+    outline: black 2px solid;
+    color: black;
+    margin: 2rem;
+    padding: 4rem 2rem 4rem 2rem;
+    border-radius: 20px;
+    width: 100%;
     max-width: 420px;
-    position: relative;
-    left: 25rem;
-    top: 10rem;
+    min-height: 500px;
     transition: 0.2s ease-in-out;
 }
