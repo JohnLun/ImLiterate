@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 
 # Create your views here.
 class HomeView(TemplateView):
-    template_name = 'reader/home.html'
+    template_name = 'home.html'
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
