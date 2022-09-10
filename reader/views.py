@@ -14,6 +14,8 @@ from django.template.response import TemplateResponse
 from urllib.request import urlopen
 # import json
 import json
+from gtts import gTTS
+from pygame import mixer
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -63,6 +65,7 @@ class ViewerView(TemplateView):
     template_name = 'viewer.html'
     word_list = ["Hello", "my", "name", "is", "rishi"]
     extra_context = {'word_list': word_list}
+
 
 ###############################################################################
 def get_definition(word):

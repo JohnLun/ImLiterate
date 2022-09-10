@@ -25,7 +25,6 @@
             <h4>Please login to continue. If you don't have an account, sign up above!</h3>
         {% endif %}
     </div>
-    
 
     <script>
         let dictionary = 
@@ -83,6 +82,9 @@
 
         function myFunction(word) 
         {
+            var tts = window.speechSynthesis;
+            var toSpeak = new SpeechSynthesisUtterance(word);
+            tts.speak(toSpeak);
             dictionary.get_info(word);
             document.getElementById("definition_title").innerHTML = word;
         }
