@@ -7,10 +7,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from django.shortcuts import redirect
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+def upload(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        fs.save(uploaded_file.name, uploaded_file)
+    return render(request, 'upload.html')
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
