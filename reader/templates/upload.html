@@ -15,7 +15,11 @@
             </form>
             
             <p>File Uploaded!</p>
-            <button type="button" class="btn btn-primary">Submit for Reading</button>
+            <form action="{% url 'viewer' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Submit for Reading</button>
+            </form>
+            
         </div>
 
         {% else %}
