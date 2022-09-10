@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from django.shortcuts import redirect
+from django.core.files.storage import FileSystemStorage
+# from .forms import DocumentForm
 from django.template.response import TemplateResponse
 
 # Create your views here.
@@ -14,6 +16,28 @@ class HomeView(TemplateView):
     template_name = 'home.html'
     word_list = [0, 1, 2, 3]
     extra_context = {'word_list': word_list}
+
+# class UploadView(TemplateView):
+#     template_name = 'upload.html'
+
+# def model_form_upload(request):
+#     if request.method == 'POST':
+#         form = DocumentForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = DocumentForm()
+#     return render(request, 'upload.html', {
+#         'form':form
+#     })
+
+def upload(request):
+    if request.method == 'POST':
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        fs.save(uploaded_file.name, uploaded_file)
+    return render(request, 'upload.html')
 
 class SignUpView(CreateView):
     form_class = UserCreationForm

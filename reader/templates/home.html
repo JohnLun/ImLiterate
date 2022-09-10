@@ -6,17 +6,14 @@
         <p>ImLiterate helps young students better learn English. Simply upload the text you want to learn about 
             and utilize our built in dictionary along with our text to speech software!</p>
 
-        {% if user.is_authenticated %}
         <div class="box">
-            <button type="button" class="btn btn-secondary">Upload File</button>
-            <p>File Uploaded!</p>
-            <button type="button" class="btn btn-primary">Submit for Reading</button>
+            <form action="{% url 'upload' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Get Started</button>
+            </form>
+            
         </div>
 
-        {% else %}
-        <div class="container text-center">
-            <h4>Please login to continue. If you don't have an account, sign up above!</h3>
-        {% endif %}
     </div>
 
 {% endblock %}
