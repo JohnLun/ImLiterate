@@ -7,12 +7,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from django.shortcuts import redirect
-<<<<<<< HEAD
 from django.core.files.storage import FileSystemStorage
 # from .forms import DocumentForm
-=======
 from django.template.response import TemplateResponse
->>>>>>> main
 
 # Create your views here.
 class HomeView(TemplateView):
