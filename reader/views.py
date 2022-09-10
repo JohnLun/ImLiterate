@@ -14,8 +14,8 @@ class HomeView(TemplateView):
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
-    template_name = 'reader/register.html'
-    success_url = ''
+    template_name = 'register.html'
+    success_url = '/home'
 
     def get(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
@@ -24,8 +24,8 @@ class SignUpView(CreateView):
 
 
 class LogoutInterfaceView(LogoutView):
-    template_name = 'reader/logout.html'
+    template_name = 'logout.html'
 
 
 class LoginInterfaceView(LoginView):
-    template_name = 'reader/login.html'
+    template_name = 'login.html'
