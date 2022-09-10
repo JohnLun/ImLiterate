@@ -14,8 +14,6 @@ from django.template.response import TemplateResponse
 from urllib.request import urlopen
 # import json
 import json
-from gtts import gTTS
-from pygame import mixer
 
 # Create your views here.
 class HomeView(TemplateView):
