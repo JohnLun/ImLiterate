@@ -9,11 +9,12 @@
         <div class="viewer_container">
             <div class="paragraph_box">
                 {% for word in word_list %}
-                    <div class="word" id="{{forloop.counter}}">{{word}}</div>
+                    <div class="word" id="{{forloop.counter}}" onclick="myFunction('{{word}}')">{{word}}</div>
                 {% endfor %}
             </div>
         
             <div class="definition_box">
+                <h3 id="definition_title">Click on a word to learn more!</h3>
                 <p id="part_of_speech"></p>
                 <p id="definitions"></p>
             </div>
@@ -59,15 +60,19 @@
             
             displayData: function(data)
             {
+                data = data.replace('app-shortdef', 'shortdef');
+                data = data.replaceAll('{bc}', '');
+                data = data.replaceAll('{it}', '');
+                data = data.replaceAll('{/it}', '');
                 var all_data = JSON.parse(data);
-                
-                definition_section = all_data['meta']['app-shortdef'];
-                document.write(data);
-                part_of_speech = definition_section['fl'];
-                definition = definition_section['def'];
 
-                document.getElementById("part_of_speech").innerHTML = part_of_speech;
-                document.getElementById("definitions").innerHTML = definition;
+                part_of_speech = all_data[0].meta.shortdef.fl;
+                definition = all_data[0].meta.shortdef.def;
+                
+                //document.write(definition);
+
+                document.getElementById("part_of_speech").innerHTML = "Part of Speech: " + part_of_speech;
+                document.getElementById("definitions").innerHTML = "Definition(s): " + definition;
             },
 
             get_info: function(word) 
@@ -76,20 +81,10 @@
             },
         }
 
-
-        var all_words = document.querySelectorAll(".word")
-        for (i = 0; i < all_words.length; ++i) 
+        function myFunction(word) 
         {
-            var word = all_words[i].innerHTML;
-            all_words[i].addEventListener("click", function () 
-            {
-                dictionary.get_info("apple");
-            });
-        }
-
-        function myFunction(id) 
-        {
-            document.getElementById(id).innerHTML = "YOU CLICKED ME!";
+            dictionary.get_info(word);
+            document.getElementById("definition_title").innerHTML = word;
         }
     </script>
 {% endblock %}
