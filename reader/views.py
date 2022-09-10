@@ -13,6 +13,9 @@ from django.core.files.storage import FileSystemStorage
 class HomeView(TemplateView):
     template_name = 'home.html'
 
+class UploadView(TemplateView):
+    template_name = 'upload.html'
+
 def upload(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
