@@ -11,3 +11,29 @@
     top: 10rem;
     transition: 0.2s ease-in-out;
 }
+
+#word
+{
+    display: inline-block;
+    padding: 5px;
+}
+
+#word:hover
+{
+    cursor: pointer;
+    background-color: gray;
+}
+
+.paragraph_box
+{
+    outline: black 2px solid;
+    color: black;
+    padding: 4rem 2rem 4rem 2rem;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    left: 25rem;
+    top: 10rem;
+    transition: 0.2s ease-in-out;
+}
