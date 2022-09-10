@@ -1,16 +1,29 @@
 {% extends "base.html" %}
 
-{% block content %}
-
+{% block content %} 
     <div class="my-5 text-center container">
         <h1>Welcome to ImLiterate!</h1>
         <p>ImLiterate helps young students better learn English. Simply upload the text you want to learn about 
             and utilize our built in dictionary along with our text to speech software!</p>
+
+        {% if user.is_authenticated %}
         <div class="box">
             <button type="button" class="btn btn-secondary">Upload File</button>
             <p>File Uploaded!</p>
             <button type="button" class="btn btn-primary">Submit for Reading</button>
         </div>
+
+        {% else %}
+        <div class="container text-center">
+            <div class="row align-items-start">
+              <div class="col">
+                One of two columns
+              </div>
+              <div class="col">
+                One of two columns
+              </div>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}
