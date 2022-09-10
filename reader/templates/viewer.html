@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <div class="my-5 text-center container">
+        <h1>Image uploaded to ImLiterate!</h1>
+        <p>Click on each word to see definitions and usage! You can also click the icon below for pronunciation assistance.</p>
+
+        {% if user.is_authenticated %}
+
+        <div class="paragraph_box">
+        {% for word in word_list %}
+            <div id="word" onclick="myFunction()">{{word}}</div>
+        {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="container text-center">
+            <h4>Please login to continue. If you don't have an account, sign up above!</h3>
+        {% endif %}
+    </div>
+
+    <script>
+        function myFunction() {
+          document.getElementById("word").innerHTML = "YOU CLICKED ME!";
+        }
+    </script>
+{% endblock %}
