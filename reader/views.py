@@ -40,7 +40,7 @@ def upload(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
-        fs.save(uploaded_file.name, uploaded_file)
+        fs.save(uploaded_file.name, uploaded_file)  
     return render(request, 'upload.html')
 
 def detect_text(path):
