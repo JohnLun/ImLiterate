@@ -16,6 +16,7 @@ from urllib.request import urlopen
 import json
 import glob
 import os
+#word_list = []
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -43,8 +44,14 @@ def upload(request):
         fs.save(uploaded_file.name, uploaded_file)  
     return render(request, 'upload.html')
 
-def detect_text(path):
+def detect_text(request):
     """Detects text in the file."""
+    print("hi")
+    list_of_files = glob.glob('./media/*') # * means all if need specific format then *.csv
+    if len(list_of_files) > 0:
+        path = max(list_of_files, key=os.path.getctime)
+
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/CREDS/striped-option-362104-9d3f8028bfa8.json"
     from google.cloud import vision
     import io
     client = vision.ImageAnnotatorClient()
@@ -59,7 +66,7 @@ def detect_text(path):
     
     res = []
     for i in range(1,len(texts)):
-        print(texts[i].description)
+        #print(texts[i].description)
         res.append(texts[i].description)
 
         #vertices = (['({},{})'.format(vertex.x, vertex.y)
@@ -75,7 +82,10 @@ def detect_text(path):
     image_file.close()
     os.remove(path)
     print(path)
-    return res
+
+    word_list = res
+    extra_context = {'word_list': word_list}
+    return render(request, 'viewer.html', extra_context)
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
@@ -97,11 +107,5 @@ class LoginInterfaceView(LoginView):
 
 class ViewerView(TemplateView):
     template_name = 'viewer.html'
-    list_of_files = glob.glob('./media/*') # * means all if need specific format then *.csv
-    print(list_of_files)
-    if len(list_of_files) > 0:
-        latest_file = max(list_of_files, key=os.path.getctime)
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/CREDS/striped-option-362104-9d3f8028bfa8.json"
-    word_list = detect_text(latest_file)
-    print("detected text")
-    extra_context = {'word_list': word_list}
+
+    #extra_context = {'word_list': word_list}

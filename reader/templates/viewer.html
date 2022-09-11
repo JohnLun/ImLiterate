@@ -25,6 +25,12 @@
             <h4>Please login to continue. If you don't have an account, sign up above!</h3>
         {% endif %}
     </div>
+    <div class="row">
+        <form action="{% url 'upload' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Upload Another File!</button>
+        </form>
+    </div>
 
     <script>
         let dictionary = 
