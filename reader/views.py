@@ -14,6 +14,8 @@ from django.template.response import TemplateResponse
 from urllib.request import urlopen
 # import json
 import json
+import glob
+import os
 
 # Create your views here.
 class HomeView(TemplateView):
@@ -38,8 +40,42 @@ def upload(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
-        fs.save(uploaded_file.name, uploaded_file)
+        fs.save(uploaded_file.name, uploaded_file)  
     return render(request, 'upload.html')
+
+def detect_text(path):
+    """Detects text in the file."""
+    from google.cloud import vision
+    import io
+    client = vision.ImageAnnotatorClient()
+
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
+
+    image = vision.Image(content=content)
+
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+    
+    res = []
+    for i in range(1,len(texts)):
+        print(texts[i].description)
+        res.append(texts[i].description)
+
+        #vertices = (['({},{})'.format(vertex.x, vertex.y)
+                    #for vertex in text.bounding_poly.vertices])
+
+        #print('bounds: {}'.format(','.join(vertices)))
+
+    if response.error.message:
+        raise Exception(
+            '{}\nFor more info on error messages, check: '
+            'https://cloud.google.com/apis/design/errors'.format(
+                response.error.message))
+    image_file.close()
+    os.remove(path)
+    print(path)
+    return res
 
 class SignUpView(CreateView):
     form_class = UserCreationForm
@@ -61,30 +97,11 @@ class LoginInterfaceView(LoginView):
 
 class ViewerView(TemplateView):
     template_name = 'viewer.html'
-    word_list = ["Hello", "my", "name", "is", "rishi"]
+    list_of_files = glob.glob('./media/*') # * means all if need specific format then *.csv
+    print(list_of_files)
+    if len(list_of_files) > 0:
+        latest_file = max(list_of_files, key=os.path.getctime)
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./static/CREDS/striped-option-362104-9d3f8028bfa8.json"
+    word_list = detect_text(latest_file)
+    print("detected text")
     extra_context = {'word_list': word_list}
-
-
-###############################################################################
-def get_definition(word):
-    api_key = "d98bcc41-7387-4462-97a6-a380a51bbcc6"
-
-    url_part_1 = "https://www.dictionaryapi.com/api/v3/references/learners/json/"
-    url_part_2 = word
-    url_part_3 = "?key=" + api_key
-    final_url = url_part_1 + url_part_2 + url_part_3
-
-    response = urlopen(final_url)
-
-    data_json = json.loads(response.read())
-    if len(data_json) == 0:
-        print("Error: Word cannot be found")
-        return
-
-    all_data = data_json[0]
-    #definition_section = all_data['def'][0]['sseq'][0][0][1]['dt'][0]
-    definition_section = all_data['meta']['app-shortdef']
-    part_of_speech = definition_section['fl']
-    definition = definition_section['def']
-    print(part_of_speech)
-    print(definition)
